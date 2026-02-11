@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Sofi 💜</title>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Fredoka:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Varela Round', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #4a1942 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff0f5;
+        }
+
+        .magic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .floating-item {
+            position: absolute;
+            opacity: 0.08;
+            animation: float-up 25s linear infinite;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #f8bbd0, #ff69b4, #e91e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #f8bbd0;
+            font-size: 1.1rem;
+        }
+
+        .main-card {
+            background: rgba(20, 20, 35, 0.9);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 30px;
+            padding: 40px 30px;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            color: #ff69b4;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .sanrio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sanrio-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .sanrio-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .svg-container {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        .sanrio-card:hover .svg-container {
+            filter: drop-shadow(0 10px 25px rgba(255, 105, 180, 0.4));
+        }
+
+        .char-name {
+            color: #f8bbd0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .char-hint {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff69b4;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #ff69b4;
+            text-align: center;
+            width: 200px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 100;
+            line-height: 1.4;
+        }
+
+        .char-hint::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #ff69b4;
+        }
+
+        .sanrio-card.revealed .char-hint,
+        .sanrio-card:hover .char-hint {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+
+        .sanrio-card.revealed .svg-container {
+            animation: glow-pulse 2s infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)) drop-shadow(0 0 5px rgba(255,105,180,0.3)); }
+            50% { filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)) drop-shadow(0 0 20px rgba(255,105,180,0.6)); }
+        }
+
+        .progress-zone {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(156, 39, 176, 0.1));
+            border: 2px dashed rgba(255, 105, 180, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .progress-text {
+            color: #f8bbd0;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 400px;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9c27b0, #ff69b4);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .reveal-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .reveal-btn {
+            background: linear-gradient(135deg, #9c27b0, #e91e63);
+            border: none;
+            color: white;
+            padding: 22px 60px;
+            font-size: 1.3rem;
+            font-family: 'Fredoka', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+        }
+
+        .reveal-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.5);
+        }
+
+        .reveal-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .reveal-btn.ready {
+            animation: btn-pulse 2s infinite;
+        }
+
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 30, 99, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(233, 30, 99, 0.8); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            max-width: 650px;
+            width: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #4a1942);
+            border: 3px solid #e91e63;
+            border-radius: 30px;
+            padding: 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modal-in 0.6s;
+        }
+
+        @keyframes modal-in {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .letter-body {
+            color: #fff0f5;
+            line-height: 2;
+            font-size: 1.05rem;
+        }
+
+        .letter-body p {
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fade-in 0.8s forwards;
+        }
+
+        .letter-body p:nth-child(1) { animation-delay: 0.3s; }
+        .letter-body p:nth-child(2) { animation-delay: 0.6s; }
+        .letter-body p:nth-child(3) { animation-delay: 0.9s; }
+        .letter-body p:nth-child(4) { animation-delay: 1.2s; }
+        .letter-body p:nth-child(5) { animation-delay: 1.5s; }
+        .letter-body p:nth-child(6) { animation-delay: 1.8s; }
+
+        @keyframes fade-in {
+            to { opacity: 1; }
+        }
+
+        .quote-box {
+            background: rgba(233, 30, 99, 0.15);
+            border-left: 4px solid #e91e63;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+        }
+
+        .mystery-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(233, 30, 99, 0.5);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .close-btn {
+            float: right;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            opacity: 0.6;
+            margin-top: -10px;
+        }
+
+        .close-btn:hover { opacity: 1; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .sanrio-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .svg-container { width: 100px; height: 100px; }
+            .modal-content { padding: 25px; }
+            .char-hint { width: 160px; font-size: 0.75rem; }
+        }
+
+        @media (max-width: 480px) {
+            .sanrio-grid { grid-template-columns: repeat(2, 1fr); }
+            .char-hint { width: 140px; font-size: 0.7rem; top: -70px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="magic-bg" id="magicBg"></div>
+
+    <div class="container">
+        <header>
+            <h1>Para Sofi</h1>
+            <p class="subtitle">Cada personaje guarda un secreto sobre ti...</p>
+        </header>
+
+        <div class="main-card">
+            <div class="section-title">✨ TOCA PARA DESCUBRIR QUÉ PIENSAN DE TI ✨</div>
+            
+            <div class="sanrio-grid" id="sanrioGrid"></div>
+
+            <div class="progress-zone">
+                <div class="progress-text" id="progressText">
+                    Descubre 6 mensajes secretos para continuar...
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="reveal-section">
+                <button class="reveal-btn" id="revealBtn" onclick="openLetter()" disabled>
+                    💌 Abrir Carta Secreta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="letterModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeLetter()">×</button>
+            <div class="letter-body">
+                <p>Hola Sofi,</p>
+                
+                <p>Feliz San Valentín y feliz día del amigo invisible. Preparé todo esto pensando en ti, en todo lo que me gusta de ti: tu sonrisa que ilumina, tu forma de ser que me encanta, lo linda, guapa, hermosa y mona que eres.</p>
+                
+                <p>Sé que te gustan las tartas, que amas a Kuromi y Hello Kitty, que eres de esas personas que hacen que todo sea mejor solo con estar ahí. Eres como estos personajes: dulce, única, especial.</p>
+                
+                <p>No te conozco desde siempre, pero sí lo suficiente para querer conocerte más. Para querer saber qué más te gusta, qué te hace reír, qué sueñas. Quiero hacer cosas que te hagan sentir bien, como esta, poco a poco, sin prisa.</p>
+
+                <div class="quote-box">
+                    "Hay personas que brillan con luz propia. Sofi, tú eres una de ellas. Y esa luz me hace querer acercarme más."
+                </div>
+                
+                <p>No busco presionarte ni incomodarte. Solo quiero que sepas que alguien nota todo lo bonito que eres. Que tu sonrisa no pasa desapercibida. Que hay alguien que piensa en hacerte feliz.</p>
+                
+                <p>Si quieres saber quién soy, la respuesta está en tus sospechas. O si prefieres que siga siendo un misterio, también está bien. Lo importante es que hoy sonrías, porque esa sonrisa mía es la mejor.</p>
+                
+                <p style="text-align: right; font-style: italic; margin-top: 30px;">
+                    — Alguien que admira cada parte de ti 💜
+                </p>
+
+                <div class="mystery-box">
+                    <p style="margin: 0; color: #f8bbd0;">
+                        🕵️‍♀️ ¿Ya sabes quién organizó todo esto? 🕵️‍♂️<br>
+                        <span style="font-size: 0.9rem; opacity: 0.8;">
+                            Tu intuición y tu corazón saben la respuesta...
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 5 personajes con mensajes personalizados para Sofi
+        const SanrioChars = [
+            {
+                name: "Kuromi",
+                hint: "Eres dulce y tu sonrisa me gusta 🖤",
+                svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Orejas -->
+                    <ellipse cx="22" cy="28" rx="10" ry="22" fill="#1a1a1a" transform="rotate(-18 22 50)"/>
+                    <ellipse cx="78" cy="28" rx="10" ry="22" fill="#1a1a1a" transform="rotate(18 78 50)"/>
+                    <ellipse cx="20" cy="32" rx="5" ry="14" fill="#ff69b4" transform="rotate(-18 20 50)" opacity="0.9"/>
+                    <ellipse cx="80" cy="32" rx="5" ry="14" fill="#ff69b4" transform="rotate(18 80 50)" opacity="0.9"/>
+                    <!-- Cabeza -->
+                    <path d="M18 42 Q18 22 50 22 Q82 22 82 42 Q86 56 82 70 Q77 84 50 84 Q23 84 18 70 Q14 56 18 42" fill="#1a1a1a"/>
+                    <!-- Lazo calavera -->
+                    <g transform="translate(50, 14)">
+                        <ellipse cx="-13" cy="0" rx="10" ry="16" fill="#ff69b4" stroke="white" stroke-width="1.5" transform="rotate(-25)"/>
+                        <ellipse cx="13" cy="0" rx="10" ry="16" fill="#ff69b4" stroke="white" stroke-width="1.5" transform="rotate(25)"/>
+                        <circle cx="0" cy="0" r="9" fill="white" stroke="#1a1a1a" stroke-width="1.5"/>
+                        <circle cx="-2.5" cy="-1.5" r="2" fill="#1a1a1a"/>
+                        <circle cx="2.5" cy="-1.5" r="2" fill="#1a1a1a"/>
+                        <circle cx="0" cy="2.5" r="1.2" fill="#1a1a1a"/>
+                    </g>
+                    <!-- Ojos -->
+                    <ellipse cx="30" cy="54" rx="9" ry="12" fill="white"/>
+                    <ellipse cx="70" cy="54" rx="9" ry="12" fill="white"/>
+                    <ellipse cx="30" cy="56" rx="3.5" ry="8" fill="#1a1a1a"/>
+                    <ellipse cx="70" cy="56" rx="3.5" ry="8" fill="#1a1a1a"/>
+                    <circle cx="33" cy="51" r="2.5" fill="white"/>
+                    <circle cx="73" cy="51" r="2.5" fill="white"/>
+                    <!-- Nariz -->
+                    <ellipse cx="50" cy="66" rx="3.5" ry="2.5" fill="#ff69b4"/>
+                    <!-- Boca -->
+                    <path d="M42 72 Q50 77 58 72" stroke="#ff69b4" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <!-- Cola -->
+                    <path d="M82 68 Q90 58 86 48" stroke="#1a1a1a" stroke-width="7" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="88" cy="46" rx="5" ry="8" fill="#ff69b4" transform="rotate(-15 88 46)"/>
+                </svg>`
+            },
+            {
+                name: "Hello Kitty",
+                hint: "Tu personalidad ilumina todo a tu alrededor 🎀",
+                svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Orejas -->
+                    <path d="M18 32 L23 15 Q30 12 34 19 L31 35" fill="white" stroke="#e0e0e0" stroke-width="0.8"/>
+                    <path d="M82 32 L77 15 Q70 12 66 19 L69 35" fill="white" stroke="#e0e0e0" stroke-width="0.8"/>
+                    <!-- Cabeza -->
+                    <ellipse cx="50" cy="52" rx="38" ry="30" fill="white"/>
+                    <!-- Lazo -->
+                    <g transform="translate(70, 26)">
+                        <path d="M0 0 Q-9 -7 -16 -2 Q-20 3 -16 8 Q-9 11 0 5" fill="#ff1744"/>
+                        <path d="M0 0 Q9 -7 16 -2 Q20 3 16 8 Q9 11 0 5" fill="#ff1744"/>
+                        <circle cx="0" cy="2" r="4.5" fill="#ff1744"/>
+                        <path d="M-2.5 2 Q0 -0.5 2.5 2 Q0 4.5 -2.5 2" fill="#b71c1c"/>
+                    </g>
+                    <!-- Ojos -->
+                    <ellipse cx="27" cy="54" rx="3.5" ry="5.5" fill="#1a1a1a"/>
+                    <ellipse cx="73" cy="54" rx="3.5" ry="5.5" fill="#1a1a1a"/>
+                    <!-- Nariz -->
+                    <ellipse cx="50" cy="60" rx="4.5" ry="3" fill="#ffd600"/>
+                    <!-- Bigotes -->
+                    <line x1="10" y1="48" x2="22" y2="51" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="8" y1="56" x2="20" y2="56" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="10" y1="64" x2="22" y2="61" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="90" y1="48" x2="78" y2="51" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="92" y1="56" x2="80" y2="56" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="90" y1="64" x2="78" y2="61" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>`
+            },
+            {
+                name: "My Melody",
+                hint: "Eres pura alegria sin esfuerzo 🌸",
+                svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Capucha -->
+                    <path d="M22 48 Q18 22 35 18 Q50 15 65 18 Q82 22 78 48 Q82 70 68 80 Q50 86 32 80 Q18 70 22 48" fill="#f8bbd0"/>
+                    <!-- Orejas -->
+                    <ellipse cx="24" cy="28" rx="11" ry="32" fill="#f8bbd0" transform="rotate(-12 24 55)"/>
+                    <ellipse cx="76" cy="28" rx="11" ry="32" fill="#f8bbd0" transform="rotate(12 76 55)"/>
+                    <ellipse cx="21" cy="32" rx="5.5" ry="18" fill="#fce4ec" transform="rotate(-12 21 55)"/>
+                    <ellipse cx="79" cy="32" rx="5.5" ry="18" fill="#fce4ec" transform="rotate(12 79 55)"/>
+                    <!-- Cara -->
+                    <ellipse cx="50" cy="58" rx="25" ry="20" fill="white"/>
+                    <!-- Ojos -->
+                    <ellipse cx="37" cy="60" rx="3" ry="4.5" fill="#4a148c"/>
+                    <ellipse cx="63" cy="60" rx="3" ry="4.5" fill="#4a148c"/>
+                    <!-- Nariz -->
+                    <ellipse cx="50" cy="68" rx="2.5" ry="1.8" fill="#f48fb1"/>
+                    <!-- Boca -->
+                    <path d="M46 74 Q50 77 54 74" stroke="#f48fb1" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <!-- Flor -->
+                    <g transform="translate(72, 42)">
+                        <circle cx="0" cy="-5" r="4.5" fill="white"/>
+                        <circle cx="5" cy="-2" r="4.5" fill="white"/>
+                        <circle cx="5" cy="3" r="4.5" fill="white"/>
+                        <circle cx="0" cy="6" r="4.5" fill="white"/>
+                        <circle cx="-5" cy="3" r="4.5" fill="white"/>
+                        <circle cx="-5" cy="-2" r="4.5" fill="white"/>
+                        <circle cx="0" cy="0" r="3.5" fill="#ffeb3b"/>
+                    </g>
+                </svg>`
+            },
+            {
+                name: "Cinnamoroll",
+                hint: "Tu forma de ser es súper bonita ☁️",
+                svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Orejas -->
+                    <ellipse cx="12" cy="48" rx="22" ry="10" fill="white" stroke="#e3f2fd" stroke-width="0.6" transform="rotate(-8 12 48)"/>
+                    <ellipse cx="88" cy="48" rx="22" ry="10" fill="white" stroke="#e3f2fd" stroke-width="0.6" transform="rotate(8 88 48)"/>
+                    <!-- Cabeza -->
+                    <ellipse cx="50" cy="52" rx="32" ry="25" fill="white"/>
+                    <!-- Mejillas -->
+                    <ellipse cx="20" cy="55" rx="7" ry="5" fill="#fce4ec" opacity="0.6"/>
+                    <ellipse cx="80" cy="55" rx="7" ry="5" fill="#fce4ec" opacity="0.6"/>
+                    <!-- Ojos -->
+                    <circle cx="33" cy="52" r="3.5" fill="#4fc3f7"/>
+                    <circle cx="67" cy="52" r="3.5" fill="#4fc3f7"/>
+                    <circle cx="34" cy="51" r="1.2" fill="white"/>
+                    <circle cx="68" cy="51" r="1.2" fill="white"/>
+                    <!-- Nariz -->
+                    <ellipse cx="50" cy="58" rx="2.5" ry="1.8" fill="#ffccbc"/>
+                    <!-- Boca -->
+                    <path d="M46 64 Q50 67 54 64" stroke="#4fc3f7" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <!-- Cola -->
+                    <path d="M72 72 Q80 68 78 76 Q75 80 72 76" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+                </svg>`
+            },
+            {
+                name: "Gudetama",
+                hint: "Me encanta reírme contigo 🥚",
+                svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Clara -->
+                    <ellipse cx="50" cy="72" rx="42" ry="12" fill="white" opacity="0.9"/>
+                    <!-- Yema -->
+                    <path d="M28 58 Q24 74 50 76 Q76 74 72 58 Q68 42 50 44 Q32 42 28 58" fill="#ffd600"/>
+                    <!-- Brazos -->
+                    <path d="M24 62 Q16 66 20 72" stroke="#ffd600" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M76 62 Q84 66 80 72" stroke="#ffd600" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <!-- Piernas -->
+                    <path d="M32 76 Q28 84 36 84" stroke="#ffd600" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <path d="M68 76 Q72 84 64 84" stroke="#ffd600" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                    <!-- Cara -->
+                    <line x1="38" y1="58" x2="43" y2="58" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="57" y1="58" x2="62" y2="58" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M48 64 Q50 65 52 64" stroke="#1a1a1a" stroke-width="1.2" fill="none"/>
+                    <!-- Brillo -->
+                    <ellipse cx="36" cy="52" rx="5" ry="3" fill="white" opacity="0.6"/>
+                </svg>`
+            }
+        ];
+
+        // Estado
+        const State = { revealed: 0, needed: 6 };
+
+        // Inicializar
+        window.onload = () => {
+            initBackground();
+            renderCharacters();
+        };
+
+        function initBackground() {
+            const bg = document.getElementById('magicBg');
+            const items = ['🎀', '🖤', '💜', '✨', '⭐', '🌙'];
+            for (let i = 0; i < 25; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-item';
+                el.textContent = items[Math.floor(Math.random() * items.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.fontSize = (20 + Math.random() * 25) + 'px';
+                el.style.animationDuration = (20 + Math.random() * 10) + 's';
+                el.style.animationDelay = Math.random() * 5 + 's';
+                bg.appendChild(el);
+            }
+        }
+
+        function renderCharacters() {
+            const grid = document.getElementById('sanrioGrid');
+            SanrioChars.forEach((char, idx) => {
+                const card = document.createElement('div');
+                card.className = 'sanrio-card';
+                card.innerHTML = `
+                    <div class="svg-container">${char.svg}</div>
+                    <div class="char-hint">${char.hint}</div>
+                    <div class="char-name">${char.name}</div>
+                `;
+                card.onclick = () => reveal(card, idx);
+                grid.appendChild(card);
+            });
+        }
+
+        function reveal(card, idx) {
+            if (card.classList.contains('revealed')) return;
+            
+            card.classList.add('revealed');
+            State.revealed++;
+            
+            const progress = Math.min((State.revealed / State.needed) * 100, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `${State.revealed} de ${State.needed} mensajes descubiertos`;
+            
+            if (State.revealed >= State.needed) {
+                const btn = document.getElementById('revealBtn');
+                btn.disabled = false;
+                btn.classList.add('ready');
+                btn.textContent = '💌 Leer carta final';
+            }
+        }
+
+        function openLetter() {
+            document.getElementById('letterModal').style.display = 'flex';
+        }
+
+        function closeLetter() {
+            document.getElementById('letterModal').style.display = 'none';
+        }
+
+        document.getElementById('letterModal').onclick = (e) => {
+            if (e.target.id === 'letterModal') closeLetter();
+        };
+    </script>
+</body>
+</html>
