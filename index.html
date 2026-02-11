@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para Sofi 💜</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -11,6 +11,8 @@
     <div class="magic-bg" id="magicBg"></div>
     <div class="hearts-container" id="heartsContainer"></div>
     <div class="sparkles" id="sparkles"></div>
+    <div class="confetti-container" id="confettiContainer"></div>
+    <div class="shake-indicator" id="shakeIndicator">🤗 ¡Abrazo enviado!</div>
 
     <div class="container">
         <header>
@@ -43,6 +45,13 @@
     <div class="modal" id="letterModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeLetter()">×</button>
+            
+            <!-- Sticker interactivo -->
+            <div class="sticker-container" id="sticker" onclick="peelSticker()">
+                <div class="sticker">🎁</div>
+                <div class="sticker-reveal">¡Sorpresa! 🎉</div>
+            </div>
+
             <div class="letter-body" id="letterBody">
                 <p class="greeting">Hola Sofi,</p>
                 
@@ -53,6 +62,15 @@
                 <p>Lo importante es que hoy nos lo pasemos bien y que disfrutemos de este día.</p>
                 
                 <p class="closing">Atentamente,<br>alguien anónimo.</p>
+
+                <!-- Contador de abrazos -->
+                <div class="hug-counter" id="hugCounter" onclick="addHug(event)">
+                    <span class="hug-icon">🤗</span>
+                    <div class="hug-text">Abrazos virtuales recibidos</div>
+                    <div class="hug-number" id="hugNumber">0</div>
+                    <div class="hug-label">¡Toca para enviar un abrazo!</div>
+                    <div class="shake-hint">📱 O agita tu móvil</div>
+                </div>
             </div>
         </div>
     </div>
